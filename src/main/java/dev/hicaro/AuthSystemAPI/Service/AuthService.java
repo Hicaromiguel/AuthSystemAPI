@@ -2,7 +2,6 @@ package dev.hicaro.AuthSystemAPI.Service;
 
 import dev.hicaro.AuthSystemAPI.Model.User;
 import dev.hicaro.AuthSystemAPI.Repository.AuthRepository;
-import dev.hicaro.AuthSystemAPI.Validation.ValidationPassword;
 
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -29,8 +28,11 @@ public class AuthService {
     }
 
     public User saveUser(User user){
+        if (authRepository.findByEmail(user.getEmail()).isPresent()) {
+            throw new RuntimeException("Email ja cadastrado");
+        }
 
-        ValidationPassword.validPassword(user.getPassword());
+        ValidationValues.validPassword(user.getPassword());
 
         user.setPassword(passwordEncoder.encode(user.getPassword()));
 

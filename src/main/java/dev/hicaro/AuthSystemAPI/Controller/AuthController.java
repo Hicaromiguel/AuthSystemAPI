@@ -56,7 +56,7 @@ public class AuthController {
         try {
             User user = authService.login(userLogin);
 
-            user.setPassword(null);
+
 
             return ResponseEntity.ok(user); // 200
 
