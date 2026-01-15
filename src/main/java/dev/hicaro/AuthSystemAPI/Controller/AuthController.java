@@ -40,7 +40,6 @@ public class AuthController {
         return authService.saveUser(user);
     }
 
-
     @DeleteMapping("/deleteAll")
     public void deleteAll() {
         authService.deleteAll();
@@ -55,8 +54,6 @@ public class AuthController {
     public ResponseEntity<?> login(@RequestBody User userLogin) {
         try {
             User user = authService.login(userLogin);
-
-
 
             return ResponseEntity.ok(user); // 200
 

@@ -5,16 +5,15 @@ import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 
+import java.util.UUID;
 
 @Entity
 @Table(name = "user_table")
 public class User {
 
-    public User() {}
-
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @GeneratedValue
+    private UUID id;
 
     @NotBlank
     @Email
@@ -25,7 +24,7 @@ public class User {
     @Column(nullable = false, length = 255)
     private String password;
 
-    public Long getId() {
+    public UUID getId() {
         return id;
     }
 
@@ -45,4 +44,3 @@ public class User {
         this.password = password;
     }
 }
-
