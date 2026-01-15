@@ -2,6 +2,7 @@ package dev.hicaro.AuthSystemAPI.Service;
 
 import dev.hicaro.AuthSystemAPI.Model.User;
 import dev.hicaro.AuthSystemAPI.Repository.AuthRepository;
+import dev.hicaro.AuthSystemAPI.Validation.ValidationPassword;
 
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -28,9 +29,10 @@ public class AuthService {
     }
 
     public User saveUser(User user){
-        if (!user.getPassword().startsWith("$2")) {// garante que não vai criptografar algo ja criptografadp
-            user.setPassword(passwordEncoder.encode(user.getPassword()));
-        }
+
+        ValidationPassword.validPassword(user.getPassword());
+
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
 
         return authRepository.save(user);
     }
@@ -45,6 +47,17 @@ public class AuthService {
 
     public Optional<User> findByEmail(String email){
         return authRepository.findByEmail(email);
+    }
+
+    public User login(User userLogin) {
+        User user = authRepository.findByEmail(userLogin.getEmail())
+                .orElseThrow(() -> new RuntimeException("User nao encontrado"));
+        if (!passwordEncoder.matches(
+                userLogin.getPassword(),
+                user.getPassword())) {
+            throw new RuntimeException("Senha invalida");
+        }
+        return user;
     }
 
 }

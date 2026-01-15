@@ -3,6 +3,7 @@ package dev.hicaro.AuthSystemAPI.Model;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 
 
 @Entity
@@ -21,7 +22,7 @@ public class User {
     private String email;
 
     @NotBlank
-    @Column( nullable = false)
+    @Column( nullable = false, length = 255)
     private String password;
 
     public Long getId() {

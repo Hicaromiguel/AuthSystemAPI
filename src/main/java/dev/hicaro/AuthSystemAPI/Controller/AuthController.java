@@ -3,6 +3,8 @@ package dev.hicaro.AuthSystemAPI.Controller;
 import dev.hicaro.AuthSystemAPI.Model.User;
 import dev.hicaro.AuthSystemAPI.Service.AuthService;
 import jakarta.validation.Valid;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -47,5 +49,19 @@ public class AuthController {
     @DeleteMapping("/{id}")
     public void deleteById(@PathVariable Long id) {
         authService.deleteById(id);
+    }
+
+    @PostMapping("/login")
+    public ResponseEntity<?> login(@RequestBody User userLogin) {
+        try {
+            User user = authService.login(userLogin);
+
+            user.setPassword(null);
+
+            return ResponseEntity.ok(user); // 200
+
+        } catch (RuntimeException err) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(err.getMessage()); // 401
+        }
     }
 }
